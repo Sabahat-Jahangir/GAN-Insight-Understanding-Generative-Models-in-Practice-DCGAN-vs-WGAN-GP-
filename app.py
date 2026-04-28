@@ -19,40 +19,130 @@ except Exception:
 
 # ==================== PAGE CONFIG ====================
 st.set_page_config(
-    page_title="🎨 Anime GAN Showdown",
-    page_icon="🎨",
+    page_title="GAN-Insights",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # ==================== CUSTOM STYLING ====================
 st.markdown("""
-    <style>
-    .main {
-        padding-top: 2rem;
-    }
-    .stTabs [data-baseweb="tab-list"] button {
-        font-size: 16px;
-        padding: 10px 24px;
-        font-weight: 500;
-    }
-    .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 20px;
-        border-radius: 10px;
-        color: white;
-        text-align: center;
-    }
-    .comparison-header {
-        text-align: center;
-        padding: 30px 0;
-        background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);
-        border-radius: 10px;
-        color: white;
-        margin-bottom: 30px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+<style>
+
+/* ===== Global Reset ===== */
+html, body, [data-testid="stAppViewContainer"], .main {
+    background-color: #F7F9FC !important;
+    color: #1F2D3D !important;
+}
+
+/* ===== Typography ===== */
+h1, h2, h3, h4, h5, h6 {
+    color: #1F2D3D !important;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== Header ===== */
+.app-header {
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #AFCBFF, #F7F9FC);
+    border: 1px solid #AFCBFF;
+    margin-bottom: 25px;
+}
+
+.app-header h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: #4F6BED;
+}
+
+.app-header p {
+    color: #1F2D3D;
+    opacity: 0.8;
+}
+
+/* ===== Tabs ===== */
+.stTabs [data-baseweb="tab"] {
+    background-color: #EAF0FF;
+    color: #1F2D3D;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 500;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: #4F6BED !important;
+    color: white !important;
+}
+
+/* ===== Buttons ===== */
+.stButton>button {
+    background-color: #4F6BED;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.stButton>button:hover {
+    background-color: #3d57c9;
+    transform: scale(1.03);
+}
+
+/* ===== Sidebar ===== */
+section[data-testid="stSidebar"] {
+    background-color: #F7F9FC !important;
+    border-right: 1px solid #E0E7FF;
+}
+
+section[data-testid="stSidebar"] * {
+    color: #1F2D3D !important;
+}
+
+/* ===== Inputs ===== */
+input, textarea, .stNumberInput input {
+    background-color: white !important;
+    color: #1F2D3D !important;
+    border: 1px solid #AFCBFF !important;
+    border-radius: 6px;
+}
+
+/* ===== Metrics ===== */
+[data-testid="metric-container"] {
+    background-color: white;
+    border: 1px solid #E0E7FF;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+/* ===== Dataframe ===== */
+.stDataFrame {
+    background-color: white !important;
+    border-radius: 10px;
+}
+
+/* ===== Plotly Fix (IMPORTANT) ===== */
+.js-plotly-plot, .plotly {
+    background-color: #F7F9FC !important;
+}
+
+/* ===== Divider ===== */
+hr {
+    border: 0.5px solid #E0E7FF;
+}
+
+/* ===== Footer ===== */
+.footer {
+    text-align: center;
+    color: #1F2D3D;
+    opacity: 0.7;
+    padding: 20px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # ==================== MODEL DEFINITIONS ====================
 if TORCH_AVAILABLE:
@@ -235,7 +325,7 @@ def create_comparison_chart():
         xaxis_title="Epoch",
         yaxis_title="Loss",
         hovermode='x unified',
-        template='plotly_dark',
+        template='plotly_white',
         height=500
     )
     return fig
@@ -254,11 +344,10 @@ def display_model_metrics(model_name, loss_d, loss_g, training_time):
 def main():
     # Header
     st.markdown("""
-        <div class="comparison-header">
-            <h1>🎨 Anime GAN Showdown</h1>
-            <h3>DCGAN vs WGAN-GP: A Generative Battle</h3>
-            <p>Explore and compare two state-of-the-art GAN architectures for anime face generation</p>
-        </div>
+        <div class="app-header">
+    <h1>GAN-Insights</h1>
+    <p>Understanding generative models through practical comparison of DCGAN and WGAN-GP</p>
+    </div>
     """, unsafe_allow_html=True)
     
     # Load models
@@ -314,22 +403,22 @@ def main():
     
     # ==================== MAIN CONTENT ====================
     tabs = st.tabs([
-        "🎲 Generation", 
-        "📊 Comparison", 
-        "🔍 Deep Dive",
-        "📈 Training Insights",
-        "⚡ Key Differences"
+    "Generation", 
+    "Comparison", 
+    "Architecture",
+    "Training Insights",
+    "Model Differences"
     ])
     
     # Tab 1: Generation
     with tabs[0]:
-        st.header("🎲 Generate Anime Faces")
+        st.header(" Generate Anime Faces")
         
         col1, col2 = st.columns(2)
         
         with col1:
             st.subheader("DCGAN Generation")
-            if st.button("🎨 Generate with DCGAN", key="dcgan_gen"):
+            if st.button(" Generate with DCGAN", key="dcgan_gen"):
                 torch.manual_seed(seed)
                 dcgan_images = generate_anime_faces(dcgan_gen, num_samples, device)
                 
@@ -360,7 +449,7 @@ def main():
         
         with col2:
             st.subheader("WGAN-GP Generation")
-            if st.button("🎨 Generate with WGAN-GP", key="wgan_gen"):
+            if st.button(" Generate with WGAN-GP", key="wgan_gen"):
                 torch.manual_seed(seed)
                 wgan_images = generate_anime_faces(wgan_gen, num_samples, device)
                 
@@ -472,7 +561,7 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:
-            st.subheader("📊 Key Metrics")
+            st.subheader("")
             
             st.metric("DCGAN Epochs", 50)
             st.metric("WGAN-GP Epochs", 30)
@@ -481,7 +570,7 @@ def main():
             st.metric("Learning Rate (D)", "0.0002 / 0.0001")
             st.metric("Feature Maps", 64)
             
-            st.subheader("⏱️ Convergence Speed")
+            st.subheader("")
             col_spd1, col_spd2 = st.columns(2)
             col_spd1.metric("DCGAN", "~24h", help="Full convergence time")
             col_spd2.metric("WGAN-GP", "~18h", help="Faster convergence")
@@ -560,11 +649,10 @@ def main():
     # Footer
     st.divider()
     st.markdown("""
-        <div style="text-align: center; color: #888; padding: 20px;">
-            <p>🎨 <b>Anime GAN Showdown</b> - Built with Streamlit & PyTorch</p>
-            <p>Compare DCGAN vs WGAN-GP for anime face generation</p>
-            <p style="font-size: 12px;">Dataset: Anime Faces | Models: PyTorch | Visualization: Plotly & Matplotlib</p>
-        </div>
+    <div class="footer">
+    <p><b>GAN-Insights</b> — Built with Streamlit and PyTorch</p>
+    <p>Exploring generative models through structured comparison</p>
+   </div>
     """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
