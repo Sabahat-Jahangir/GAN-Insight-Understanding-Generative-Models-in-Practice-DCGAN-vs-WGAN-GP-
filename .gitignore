@@ -54,18 +54,10 @@ htmlcov/
 .streamlit/secrets.toml
 .streamlit/cache/
 
-# Models and data
-models/*
+# Models (only keep trained GAN weights)
+models/
 !models/dcgan_generator_best.pth
 !models/wgan-gp_generator_best.pth
-*.pth
-!models/dcgan_generator_best.pth
-!models/wgan-gp_generator_best.pth
-*.pt
-*.onnx
-data/
-*.zip
-*.tar.gz
 
 # Results
 results/
